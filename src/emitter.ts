@@ -18,7 +18,7 @@ class EE {
   }
 }
 
-type ValidEventTypes = string | symbol | object
+export type ValidEventTypes = string | symbol | object
 
 type EventNames<T extends ValidEventTypes> = T extends string | symbol
     ? T
