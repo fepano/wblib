@@ -1,13 +1,13 @@
 {
-  "name": "mixlib",
-  "version": "0.0.0",
+  "name": "wblib",
+  "version": "1.0.0",
   "main": "dist/index.js",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "sideEffects": false,
   "authors": "wopen <nepow@foxmail.com>",
-  "repository": "git@github.com:woopen/mixlib.git",
-  "homepage": "https://github.com/woopen/mixlib",
+  "repository": "git@github.com:woopen/wblib.git",
+  "homepage": "https://github.com/woopen/wblib",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
@@ -32,7 +32,7 @@
     "eslint": "^8.18.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
-    "execa": "^6.1.0",
+    "execa": "^5.1.0",
     "jest": "^28.1.1",
     "jest-environment-jsdom": "^28.1.1",
     "rollup": "^2.75.6",

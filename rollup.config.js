@@ -12,7 +12,7 @@ export default [
     output: {
       format: 'umd',
       file: 'dist/index.min.js',
-      name: 'mixlib',
+      name: 'wblib',
       sourcemap: true
     },
     plugins: [
