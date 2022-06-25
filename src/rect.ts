@@ -7,24 +7,32 @@ export class Rect implements Destroyable {
     this.rect = {} as DOMRect;
   }
 
-  get width(): number {
+  get width() {
     this.tryUpdate(this.rect.width);
     return this.rect.width;
   }
 
-  get height(): number {
+  get height() {
     this.tryUpdate(this.rect.height);
     return this.rect.height;
   }
 
-  get x(): number {
+  get x() {
     this.tryUpdate(this.rect.left);
     return this.rect.left;
   }
 
-  get y(): number {
+  get y() {
     this.tryUpdate(this.rect.top);
     return this.rect.top;
+  }
+
+  get bottom() {
+    return this.rect.bottom;
+  }
+
+  get right() {
+    return this.rect.right;
   }
 
   get changed() {
