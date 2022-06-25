@@ -48,10 +48,15 @@ export class Drag implements Destroyable {
 
   private upHandler = (ev: PointerEvent): void => {
     ev.preventDefault();
-    this.el.releasePointerCapture(ev.pointerId);
+    try {
+      this.el.releasePointerCapture(ev.pointerId);
+    } catch (error) {
+      // ignore
+    }
     this.el.removeEventListener('pointermove', this.moveHandler, true);
-
-    if (this.end) this.end(ev);
+    if (this.end) {
+      requestAnimationFrame(() => this.end!(ev));
+    }
   };
 
   destroy() {
