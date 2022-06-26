@@ -25,22 +25,18 @@ export class Drag implements Destroyable {
   }
 
   private downHandler = (ev: PointerEvent) => {
-    ev.preventDefault();
     this.el.setPointerCapture(ev.pointerId);
     this.el.addEventListener('pointermove', this.moveHandler, true);
     this.el.addEventListener('pointerup', this.upHandler, true);
     this.el.addEventListener('pointercancel', this.upHandler, true);
     this.start(ev);
-    return false;
   };
 
   private moveHandler = (ev: PointerEvent) => {
-    ev.preventDefault();
     this.lastEv = ev;
     if (this.pending) return;
     this.pending = true;
     requestAnimationFrame(this.handlerMove);
-    return false;
   };
 
   private handlerMove = () => {
@@ -49,14 +45,10 @@ export class Drag implements Destroyable {
   };
 
   private upHandler = (ev: PointerEvent) => {
-    ev.preventDefault();
     this.el.removeEventListener('pointermove', this.moveHandler, true);
     this.el.removeEventListener('pointerup', this.upHandler, true);
     this.el.removeEventListener('pointercancel', this.upHandler, true);
-    if (this.end) {
-      requestAnimationFrame(() => this.end!(ev));
-    }
-    return false;
+    if (this.end) requestAnimationFrame(() => this.end!(ev));
   };
 
   destroy() {
