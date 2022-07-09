@@ -75,6 +75,7 @@ export class Drag implements Destroyable {
 
   private upHandler = (ev: PointerEvent) => {
     this.removePointerEvents();
+    this.pending = false;
     if (this.end) {
       cancelAnimationFrame(this.rafId);
       this.end(ev);
@@ -82,6 +83,7 @@ export class Drag implements Destroyable {
   };
 
   private touchUpHandler = (ev: TouchEvent) => {
+    this.pending = false;
     if (this.end) {
       cancelAnimationFrame(this.rafId);
       this.end(getDragEvent(ev));
