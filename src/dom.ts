@@ -22,9 +22,7 @@ export function $<T extends HTMLElement>(
       const value = attrs[name];
       if (value === undefined) return;
 
-      if (/^on\w+$/.test(name)) {
-        (el as any)[name] = value;
-      } else if (name === 'selected') {
+      if (name === 'selected') {
         if (value) {
           el.setAttribute(name, 'true');
         }

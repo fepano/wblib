@@ -1,27 +1,39 @@
 import { Destroyable } from './destroyable';
+import { isIOSLt15 } from './env';
 
-type Fn = (ev: PointerEvent) => any;
+export interface DragEvent {
+  clientX: number;
+  clientY: number;
+}
+
+type Fn = (ev: DragEvent) => any;
+
+function getDragEvent(ev: TouchEvent) {
+  const t = ev.changedTouches[0] || {};
+  return { clientX: t.clientX || 0, clientY: t.clientY || 0 };
+}
 
 export class Drag implements Destroyable {
-  private el: HTMLElement;
-
-  private start: Fn;
-
-  private move: Fn;
-
-  private end: Fn | undefined;
-
   private pending = false;
 
-  private lastEv!: PointerEvent;
+  private lastEv!: PointerEvent | TouchEvent;
 
-  constructor(dom: HTMLElement, start: Fn, move: Fn, end?: Fn) {
-    this.el = dom;
+  private rafId!: any;
+
+  constructor(private el: HTMLElement, private start: Fn, private move: Fn, private end?: Fn) {
+    this.el = el;
     this.start = start;
     this.move = move;
     this.end = end;
 
-    dom.addEventListener('pointerdown', this.downHandler, true);
+    if (isIOSLt15) {
+      el.addEventListener('touchstart', this.touchDownHandler, true);
+      el.addEventListener('touchmove', this.touchMoveHandler, true);
+      el.addEventListener('touchend', this.touchUpHandler, true);
+      el.addEventListener('touchcancel', this.touchUpHandler, true);
+    } else {
+      el.addEventListener('pointerdown', this.downHandler, true);
+    }
   }
 
   private downHandler = (ev: PointerEvent) => {
@@ -32,35 +44,64 @@ export class Drag implements Destroyable {
     this.start(ev);
   };
 
+  private touchDownHandler = (ev: TouchEvent) => {
+    ev.preventDefault();
+    this.start(getDragEvent(ev));
+  };
+
   private moveHandler = (ev: PointerEvent) => {
     this.lastEv = ev;
     if (this.pending) return;
     this.pending = true;
-    requestAnimationFrame(this.handlerMove);
+    this.rafId = requestAnimationFrame(this.handlerMove);
   };
 
   private handlerMove = () => {
-    this.move(this.lastEv);
+    this.move(this.lastEv as PointerEvent);
+    this.pending = false;
+  };
+
+  private touchMoveHandler = (ev: TouchEvent) => {
+    this.lastEv = ev;
+    if (this.pending) return;
+    this.pending = true;
+    this.rafId = requestAnimationFrame(this.handlerTouchMove);
+  };
+
+  private handlerTouchMove = () => {
+    this.move(getDragEvent(this.lastEv as TouchEvent));
     this.pending = false;
   };
 
   private upHandler = (ev: PointerEvent) => {
+    this.removePointerEvents();
+    if (this.end) {
+      cancelAnimationFrame(this.rafId);
+      this.end(ev);
+    }
+  };
+
+  private touchUpHandler = (ev: TouchEvent) => {
+    if (this.end) {
+      cancelAnimationFrame(this.rafId);
+      this.end(getDragEvent(ev));
+    }
+  };
+
+  private removePointerEvents() {
     this.el.removeEventListener('pointermove', this.moveHandler, true);
     this.el.removeEventListener('pointerup', this.upHandler, true);
     this.el.removeEventListener('pointercancel', this.upHandler, true);
-    if (this.end) requestAnimationFrame(() => this.end!(ev));
-  };
+  }
 
   destroy() {
     if (!this.el) return;
+    this.el.removeEventListener('touchstart', this.touchDownHandler, true);
+    this.el.removeEventListener('touchmove', this.touchMoveHandler, true);
+    this.el.removeEventListener('touchend', this.touchUpHandler, true);
+    this.el.removeEventListener('touchcancel', this.touchUpHandler, true);
     this.el.removeEventListener('pointerdown', this.downHandler, true);
-    this.el.removeEventListener('pointerup', this.upHandler, true);
-    this.el.removeEventListener('pointercancel', this.upHandler, true);
-    this.el.removeEventListener('pointermove', this.moveHandler, true);
-    this.start = null!;
-    this.move = null!;
-    this.end = null!;
-    this.lastEv = null!;
+    this.removePointerEvents();
     this.el = null!;
   }
 }

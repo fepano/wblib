@@ -1,11 +1,10 @@
 function padStart(v: string | number, len = 2, str = '0'): string {
   v = String(v);
+  if (v.padStart) return v.padStart(len, str);
   if (v.length >= len) return v;
-
   for (let i = 0, l = len - v.length; i < l; i++) {
     v = str + v;
   }
-
   return v;
 }
 
@@ -29,9 +28,7 @@ export function formatTime(seconds: number): string {
     )}:${padStart(seconds % 60)}`;
   }
 
-  if (isNeg) ret = `-${ret}`;
-
-  return ret;
+  return isNeg ? `-${ret}` : ret;
 }
 
 export function clamp(n: number, lower = 0, upper = 1): number {

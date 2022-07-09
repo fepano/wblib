@@ -27,11 +27,9 @@ export class DomListener implements Destroyable {
   }
 
   destroy(): void {
-    if (!this.handler) return;
+    if (!this.node) return;
     this.node.removeEventListener(this.type, this.handler, this.options);
     this.node = null!;
-    this.handler = null!;
-    this.options = null!;
   }
 }
 
