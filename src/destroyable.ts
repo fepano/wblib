@@ -62,17 +62,11 @@ export function destroy(key: any): void {
 
 export function addDestroyableListener<K extends keyof GlobalEventHandlersEventMap>(
   key: any,
-  node: EventTarget,
-  type: K,
-  handler: (event: GlobalEventHandlersEventMap[K]) => void,
-  useCapture?: boolean): DomListener;
-export function addDestroyableListener(
-  key: any,
   el: EventTarget,
-  type: string,
-  listener: EventListener,
+  type: K,
+  listener: (event: GlobalEventHandlersEventMap[K]) => void,
   options?: boolean | AddEventListenerOptions,
-): DomListener {
+) {
   const domListener = new DomListener(el, type, listener, options);
   if (key) addDestroyable(key, domListener);
   return domListener;
