@@ -1,11 +1,11 @@
 {
   "name": "wblib",
-  "version": "1.0.11",
-  "main": "dist/index.js",
+  "version": "1.0.12",
+  "main": "dist/index.min.js",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "sideEffects": false,
-  "authors": "wopen <nepow@foxmail.com>",
+  "authors": "oyuyue <oyuyue@outlook.com>",
   "repository": "git@github.com:woopen/wblib.git",
   "homepage": "https://github.com/woopen/wblib",
   "publishConfig": {
