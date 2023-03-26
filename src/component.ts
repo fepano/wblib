@@ -3,7 +3,7 @@ import { isString } from './is';
 import { destroy, Destroyable } from './destroyable';
 import { EventEmitter, ValidEventTypes } from './emitter';
 
-function getEl(
+function getEl<T>(
   container?: HTMLElement | DocumentFragment,
   desc?: string | HTMLElement,
   attrs?: { [key: string]: any; },
@@ -17,11 +17,11 @@ function getEl(
     el = $(desc, attrs, children, classPrefix);
   }
   if (container) container.appendChild(el);
-  return el;
+  return el as unknown as T;
 }
 
-export class Component implements Destroyable {
-  el: HTMLElement;
+export class Component<T extends HTMLElement> implements Destroyable {
+  el: T;
 
   constructor(
     container?: HTMLElement | DocumentFragment,
@@ -30,7 +30,7 @@ export class Component implements Destroyable {
     children?: string | Array<Node>,
     classPrefix?: string,
   ) {
-    this.el = getEl(container, desc, attrs, children, classPrefix);
+    this.el = getEl<T>(container, desc, attrs, children, classPrefix);
   }
 
   destroy() {
@@ -41,9 +41,10 @@ export class Component implements Destroyable {
 
 export class EventEmitterComponent<
   EventTypes extends ValidEventTypes = string | symbol,
-  Context = any
-> extends EventEmitter<EventTypes, Context> implements Component {
-  el: HTMLElement;
+  Context = any,
+  T extends HTMLElement = HTMLElement,
+> extends EventEmitter<EventTypes, Context> implements Component<T> {
+  el: T;
 
   constructor(
     container?: HTMLElement | DocumentFragment,
@@ -60,4 +61,24 @@ export class EventEmitterComponent<
     removeNode(this.el);
     destroy(this);
   }
+}
+
+export function createComponent(
+  container2?: HTMLElement | DocumentFragment,
+  desc2?: string | HTMLElement,
+  attrs2?: { [key: string]: any; },
+  children2?: string | Array<Node>,
+  classPrefix2?: string,
+) {
+  return class <T extends HTMLElement> extends Component<T> {
+    constructor(
+      container?: HTMLElement | DocumentFragment,
+      desc?: string | HTMLElement,
+      attrs?: { [key: string]: any; },
+      children?: string | Array<Node>,
+      classPrefix?: string,
+    ) {
+      super(container || container2, desc || desc2, attrs || attrs2, children || children2, classPrefix || classPrefix2);
+    }
+  };
 }

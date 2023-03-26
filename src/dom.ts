@@ -43,21 +43,13 @@ export function $<T extends HTMLElement>(
   return el as T;
 }
 
-export function removeNode(node: Element): void {
+export function removeNode(node?: Element | DocumentFragment): void {
   if (!node) return;
-  if (node.remove) {
-    node.remove();
+  if ((node as any).remove) {
+    (node as any).remove();
   } else if (node.parentNode) {
     node.parentNode.removeChild(node);
   }
-}
-
-export function show(node: HTMLElement | SVGElement): void {
-  node.style.display = '';
-}
-
-export function hide(node: HTMLElement | SVGElement): void {
-  node.style.display = 'none';
 }
 
 export function addClass<T extends Element>(dom: T, cls = '', prefix = ''): T {
@@ -91,6 +83,28 @@ export function toggleClass(dom: Element, cls: string, force?: boolean, prefix =
     return true;
   }
   return dom.classList.toggle(cls, force);
+}
+
+export function show(node: HTMLElement | SVGElement): void {
+  node.style.display = '';
+}
+
+export function hide(node: HTMLElement | SVGElement): void {
+  node.style.display = 'none';
+}
+
+export function create$(
+  desc2?: string,
+  attrs2?: { [key: string]: any; },
+  children2?: string | Array<Node>,
+  classPrefix2?: string,
+) {
+  return <T extends HTMLElement>(
+    desc?: string,
+    attrs?: { [key: string]: any; },
+    children?: string | Array<Node>,
+    classPrefix = '',
+  ) => $<T>(desc || desc2, attrs || attrs2, children || children2, classPrefix || classPrefix2);
 }
 
 export const svgNS = 'http://www.w3.org/2000/svg';
