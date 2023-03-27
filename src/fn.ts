@@ -44,10 +44,10 @@ export function throttleTime(fn: Function, time = 0, ctx?: any) {
 }
 
 export function getChangedAttrs<T extends Record<string, any>>(newV: Partial<T>, oldV: Partial<T>, updateOld = false) {
-  const patch: Partial<T> = {};
+  const patch: [keyof T, Partial<T>[keyof T], Partial<T>[keyof T]][] = [];
   Object.keys(newV).forEach((x: keyof T) => {
     if (newV[x] !== oldV[x]) {
-      patch[x] = newV[x];
+      patch.push([x, newV[x], oldV[x]]);
       if (updateOld) oldV[x] = newV[x];
     }
   });
