@@ -1,6 +1,8 @@
 dist
 lib
+es
 scripts
 __tests__
 *.js
+*.cjs
 *.d.ts

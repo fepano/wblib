@@ -20,7 +20,7 @@ function getEl<T>(
   return el as unknown as T;
 }
 
-export class Component<T extends HTMLElement> implements Destroyable {
+export class Component<T extends HTMLElement = HTMLElement> implements Destroyable {
   el: T;
 
   constructor(

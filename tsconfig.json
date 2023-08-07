@@ -19,9 +19,9 @@
     "skipLibCheck": true,
     "rootDir": "./src",
     "baseUrl": ".",
-    "outDir": "lib",
-    "declarationDir": "lib"
+    "outDir": "es",
+    "declarationDir": "es"
   },
-  "exclude": ["node_modules", "dist", "lib"],
+  "exclude": ["node_modules", "dist", "es"],
   "include": ["src/**/*.ts"]
 }

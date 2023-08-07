@@ -4,7 +4,7 @@ import { terser } from 'rollup-plugin-terser'
 import ts from 'rollup-plugin-typescript2'
 
 fs.rmSync('./dist', { recursive: true, force: true })
-fs.rmSync('./lib', { recursive: true, force: true })
+fs.rmSync('./es', { recursive: true, force: true })
 
 export default [
   defineConfig({
@@ -31,7 +31,7 @@ export default [
     input: './src/index.ts',
     output: {
       format: 'es',
-      dir: 'lib',
+      dir: 'es',
       preserveModules: true
     },
     plugins: [

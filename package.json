@@ -1,10 +1,18 @@
 {
   "name": "wblib",
-  "version": "1.0.14",
+  "version": "1.0.15",
+  "type": "module",
   "main": "dist/index.min.js",
-  "module": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "module": "es/index.js",
+  "types": "es/index.d.ts",
   "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./es/index.js",
+      "require": "./dist/index.min.js",
+      "types": "./es/index.d.ts"
+    }
+  },
   "authors": "oyuyue <oyuyue@outlook.com>",
   "repository": "git@github.com:woopen/wblib.git",
   "homepage": "https://github.com/woopen/wblib",
@@ -14,7 +22,7 @@
   },
   "files": [
     "dist",
-    "lib"
+    "es"
   ],
   "license": "MIT",
   "scripts": {
@@ -28,17 +36,17 @@
     "@babel/preset-typescript": "^7.17.12",
     "@typescript-eslint/eslint-plugin": "^5.28.0",
     "@typescript-eslint/parser": "^5.28.0",
-    "enquirer": "^2.3.6",
+    "enquirer": "^2.4.1",
     "eslint": "^8.18.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
-    "execa": "^5.1.0",
+    "execa": "^7.2.0",
     "jest": "^28.1.1",
     "jest-environment-jsdom": "^28.1.1",
     "rollup": "^2.75.6",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.32.1",
-    "semver": "^7.3.7",
+    "semver": "^7.5.4",
     "tslib": "^2.4.0",
     "typescript": "^4.7.4"
   }
